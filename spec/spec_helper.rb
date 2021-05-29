@@ -1,7 +1,7 @@
-if ENV['COVERAGE'] == "true"
-  require 'simplecov'
-  require 'simplecov-console'
-  require 'coveralls'
+if ENV["COVERAGE"] == "true"
+  require "simplecov"
+  require "simplecov-console"
+  require "coveralls"
   Coveralls.wear!
 
   SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
@@ -9,7 +9,16 @@ if ENV['COVERAGE'] == "true"
     SimpleCov::Formatter::HTMLFormatter,
     SimpleCov::Formatter::Console
   ]
-  SimpleCov.start 'rails'
+  SimpleCov.start "rails"
+end
+
+if ENV["DEPRECIATION_TRACKER"]
+  DepreciationTracker.track_rspec(
+    config,
+    shitlist_path: "spec/support/depreciation_warning.shitlist.json",
+    mode: ENV["DEPRECIATION_TRACKER"],
+    transform_message: ->(message) { message.gsub("#{Rails.root}/", "") },
+  )
 end
 
 RSpec.configure do |config|
@@ -36,8 +45,8 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-# The settings below are suggested to provide a good initial experience
-# with RSpec, but feel free to customize to your heart's content.
+  # The settings below are suggested to provide a good initial experience
+  # with RSpec, but feel free to customize to your heart's content.
 =begin
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
